@@ -3,20 +3,32 @@
 from djitellopy import Tello
 import cv2, math, time
 
+fly = False
+
 tello = Tello()
 tello.connect()
-
 tello.streamon()
 frame_read = tello.get_frame_read()
 
 print(f"Battery Life Pecentage: {tello.get_battery()}")
 
-tello.takeoff()
+if fly:
+    try:
+        tello.takeoff()
+        print("Takeoff successful")
+        time.sleep(3)
+
+    except Exception as e:
+        print(f"Error during takeoff: {e}")
 
 while True:
     # In reality you want to display frames in a seperate thread. Otherwise
     # they will freeze while the drone moves.
     img = frame_read.frame
+
+    # Converti il frame al formato corretto BGR
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
     cv2.imshow("drone", img)
 
     key = cv2.waitKey(1) & 0xff
@@ -44,4 +56,13 @@ while True:
         time.sleep(5)
         tello.send_rc_control(0, 0, 0, 0)
 
-tello.land()
+
+tello.streamoff()
+
+if fly:
+    try:
+        tello.land()
+        print("Land successful")
+
+    except Exception as e:
+        print(f"Error during Land: {e}")
