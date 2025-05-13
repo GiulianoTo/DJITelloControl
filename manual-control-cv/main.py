@@ -50,6 +50,8 @@ while True:
         tello.move_up(30)
     elif key == ord('f'):
         tello.move_down(30)
+    elif key == ord('l'):
+        tello.land()
     elif key == ord('t'):
         # Only for test purpose...
         tello.send_rc_control(0, 10, 0, 0)
