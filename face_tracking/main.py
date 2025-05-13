@@ -99,6 +99,9 @@ def track_face_in_video_feed(exit_event, show_video_conn, video_writer_conn, run
     while not exit_event.is_set():
         frame = frame_read.frame
 
+        # Converti il frame al formato corretto BGR
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+
         frame = imutils.resize(frame, width=600)
         H, W, _ = frame.shape
 
